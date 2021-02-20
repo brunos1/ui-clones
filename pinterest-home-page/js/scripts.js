@@ -31,16 +31,22 @@ function exitScreen(index, exitDelay) {
 
 }
 
-function setupAnimationCycle({ initialScreenIndex, timePerScreen, exitDelay }) {
-    enterScreen(initialScreenIndex);
+function setupAnimationCycle({ timePerScreen, exitDelay }) {
+    const cycleTime = timePerScreen + exitDelay;
+    let nextIndex = 0;
 
-    setTimeout(() => {
-        exitScreen(initialScreenIndex, exitDelay);
-    }, timePerScreen);
+    function nextCycle() {
+        enterScreen(nextIndex);
+        setTimeout(() => exitScreen(nextIndex, exitDelay), timePerScreen);
+        nextIndex = nextIndex >= grids.length - 1 ? 0 : nextIndex + 1;
+    }
+
+    nextCycle();
+
+    setInterval(nextCycle, cycleTime);
 }
 
 setupAnimationCycle({
-    initialScreenIndex: 0,
     timePerScreen: 2000, //ms
     exitDelay: 200 * 7 // ms
 });
