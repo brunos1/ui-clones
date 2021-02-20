@@ -9,15 +9,34 @@ function enterScreen(index) {
     grid.classList.add('active');
 
     gridColumns.forEach(element => {
-        element.classList.remove('animate-before');
+        element.classList.remove('animate-before', 'animate-after');
     });
+
+    heading.classList.remove('animate-before', 'animate-after');
 }
-function exitScreen(index) {
+function exitScreen(index, exitDelay) {
+    const grid = grids[index];
+    const heading = headings[index];
+    const gridColumns = grid.querySelectorAll('.column');
+
+    gridColumns.forEach(element => {
+        element.classList.add('animate-after');
+    });
+
+    heading.classList.add('animate-after');
+
+    setTimeout(() => {
+        grid.classList.remove('active')
+    }, exitDelay);
 
 }
 
 function setupAnimationCycle({ initialScreenIndex, timePerScreen, exitDelay }) {
-    enterScreen(0);
+    enterScreen(initialScreenIndex);
+
+    setTimeout(() => {
+        exitScreen(initialScreenIndex, exitDelay);
+    }, timePerScreen);
 }
 
 setupAnimationCycle({
